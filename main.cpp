@@ -3,14 +3,18 @@
 #include <GL\glew.h>
 #include <GL\freeglut.h>
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
 #define DEF_floorGridScale	1.0
 #define DEF_floorGridXSteps	10.0
 #define DEF_floorGridZSteps	10.0
+#define pi 3.1415
 
 float ctlpoints[21][21][3]; 
+float L1=1, L2=1, A1=0, A2=0, S1=0, S2=0, D1X=1, D1Y=1, D2X=0, D2Y=0, t = 0;
+int wave = 1;
 GLUnurbsObj *theNurb;
 
 void ejesCoordenada() {
@@ -70,14 +74,21 @@ void changeViewport(int w, int h) {
 }
 
 void init_surface() {
-	
+		
 	
 	
 }
 
+void function_waves(int i, int j, float t){
+	float W1 = 2*pi/L1;
+	float W2 = 2*pi/L2;
+	float O1 = S1 * W1;
+	float O2 = S2 * W2;
+	ctlpoints[i][j][1] = A1 * sin((D1X*ctlpoints[i][j][0] +  D1Y*ctlpoints[i][j][2])*W1 + 100 * O1)
+					   + A2 * sin((D2X*ctlpoints[i][j][0] +  D2Y*ctlpoints[i][j][2])*W2 + 100 * O2);
+}
+
 void init(){
-
-
 
    glEnable(GL_LIGHTING);
    glEnable(GL_LIGHT0);
@@ -114,7 +125,32 @@ void Keyboard(unsigned char key, int x, int y)
 	case 27:             
 		exit (0);
 		break;
-	
+  };
+
+  if(wave == 1){
+	if (key == 'a') L1 = L1 - 0.1;
+    else if (key == 'z') L1 = L1 + 0.1;
+    else if (key == 's') A1 = A1 - 0.1;
+    else if (key == 'x') A1 = A1 + 0.1;
+    else if (key == 'd') S1 = S1 - 0.1;
+    else if (key == 'c') S1 = S1 + 0.1;
+    else if (key == 'f') D1X = D1X - 0.1;
+    else if (key == 'v') D1X = D1X + 0.1;
+	else if (key == 'g') D1Y = D1Y - 0.1;
+	else if (key == 'b') D1Y = D1Y + 0.1;
+  } else {
+	if (key == '1') wave = 1;
+	else if (key == '2') wave = 2;
+	else if (key == 'a') L2 = L2 - 0.1;
+    else if (key == 'z') L2 = L2 + 0.1;
+    else if (key == 's') A2 = A2 - 0.1;
+    else if (key == 'x') A2 = A2 + 0.1;
+    else if (key == 'd') S2 -= 0.1;
+    else if (key == 'c') S2 += 0.1;
+    else if (key == 'f') D2X -= 0.1;
+	else if (key == 'v') D2X += 0.1;
+	else if (key == 'g') D2Y -= 0.1;
+	else if (key == 'b') D2Y += 0.1;
   }
 }
 
@@ -191,10 +227,12 @@ void render(){
 
 	gluBeginSurface(theNurb);
     
-	/*gluNurbsSurface(theNurb, 
+	/*
+	gluNurbsSurface(theNurb, 
                    25, variableKnots, 25, variableKnots,
                    21 * 3, 3, variablePuntosControl, 
-                   4, 4, GL_MAP2_VERTEX_3);*/
+                   4, 4, GL_MAP2_VERTEX_3); 
+	*/
 	/*
 
 		No cambien los numeros de la funcion, solo deben de poner los nombres de las variables correspondiente.
@@ -219,6 +257,7 @@ void render(){
 	        glVertex3f(ctlpoints[i][j][0], 	ctlpoints[i][j][1], ctlpoints[i][j][2]);
 		}
 	}
+	t++;
 	glEnd();
 	glEnable(GL_LIGHTING);
 		
