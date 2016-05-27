@@ -128,23 +128,23 @@ void Keyboard(unsigned char key, int x, int y)
   };
 
   if(wave == 1){
-	if (key == 'a') L1 = L1 - 0.1;
-    else if (key == 'z') L1 = L1 + 0.1;
-    else if (key == 's') A1 = A1 - 0.1;
-    else if (key == 'x') A1 = A1 + 0.1;
-    else if (key == 'd') S1 = S1 - 0.1;
-    else if (key == 'c') S1 = S1 + 0.1;
-    else if (key == 'f') D1X = D1X - 0.1;
-    else if (key == 'v') D1X = D1X + 0.1;
-	else if (key == 'g') D1Y = D1Y - 0.1;
-	else if (key == 'b') D1Y = D1Y + 0.1;
+	if (key == 'a') L1 -= 0.1;
+    else if (key == 'z') L1 += 0.1;
+    else if (key == 's') A1 -= 0.1;
+    else if (key == 'x') A1 += 0.1;
+    else if (key == 'd') S1 -= 0.1;
+    else if (key == 'c') S1 += 0.1;
+    else if (key == 'f') D1X -= 0.1;
+    else if (key == 'v') D1X += 0.1;
+	else if (key == 'g') D1Y -= 0.1;
+	else if (key == 'b') D1Y += 0.1;
   } else {
 	if (key == '1') wave = 1;
 	else if (key == '2') wave = 2;
-	else if (key == 'a') L2 = L2 - 0.1;
-    else if (key == 'z') L2 = L2 + 0.1;
-    else if (key == 's') A2 = A2 - 0.1;
-    else if (key == 'x') A2 = A2 + 0.1;
+	else if (key == 'a') L2 -= 0.1;
+    else if (key == 'z') L2 += 0.1;
+    else if (key == 's') A2 -= 0.1;
+    else if (key == 'x') A2 += 0.1;
     else if (key == 'd') S2 -= 0.1;
     else if (key == 'c') S2 += 0.1;
     else if (key == 'f') D2X -= 0.1;
@@ -254,10 +254,11 @@ void render(){
 	glBegin(GL_POINTS);
 	for (i = 0; i <21; i++) {
 		for (j = 0; j < 21; j++) {
+			function_waves(i,j,t);
 	        glVertex3f(ctlpoints[i][j][0], 	ctlpoints[i][j][1], ctlpoints[i][j][2]);
 		}
 	}
-	t++;
+	t += 0.1;
 	glEnd();
 	glEnable(GL_LIGHTING);
 		
@@ -289,6 +290,7 @@ int main (int argc, char** argv) {
 
 	glutReshapeFunc(changeViewport);
 	glutDisplayFunc(render);
+	glutIdleFunc(render);
 	glutKeyboardFunc (Keyboard);
 		
 	GLenum err = glewInit();
