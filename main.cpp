@@ -13,8 +13,11 @@ using namespace std;
 #define pi 3.1415
 
 float ctlpoints[21][21][3]; 
-float L1=1, L2=1, A1=0, A2=0, S1=0, S2=0, D1X=1, D1Y=1, D2X=0, D2Y=0, t = 0;
+GLfloat t=0, L1=1, L2=1, A1=0, A2=0, S1=0, S2=0, D1X=1, D1Y=1, D2X=0, D2Y=0;
 int wave = 1;
+GLfloat variableKnots[25] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+							 1.0, 2.0, 1.0, 2.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+							 0.0, 0.0, 0.0, 0.0, 0.0};
 GLUnurbsObj *theNurb;
 
 void ejesCoordenada() {
@@ -79,13 +82,19 @@ void init_surface() {
 	
 }
 
-void function_waves(int i, int j, float t){
+void function_waves(int value){
 	float W1 = 2*pi/L1;
 	float W2 = 2*pi/L2;
 	float O1 = S1 * W1;
 	float O2 = S2 * W2;
-	ctlpoints[i][j][1] = A1 * sin((D1X*ctlpoints[i][j][0] +  D1Y*ctlpoints[i][j][2])*W1 + 100 * O1)
+	
+	for (int i = 0; i <21; i++) {
+		for (int j = 0; j < 21; j++) {
+			ctlpoints[i][j][1] = A1 * sin((D1X*ctlpoints[i][j][0] +  D1Y*ctlpoints[i][j][2])*W1 + 100 * O1)
 					   + A2 * sin((D2X*ctlpoints[i][j][0] +  D2Y*ctlpoints[i][j][2])*W2 + 100 * O2);
+		}
+	}
+	
 }
 
 void init(){
@@ -223,25 +232,20 @@ void render(){
 	glEnable( GL_LINE_SMOOTH );	
 
 	
-	glPushMatrix();
+	GLfloat* variablePuntosControl = &ctlpoints[0][0][0]; 
 
+	glPushMatrix();
 	gluBeginSurface(theNurb);
-    
-	/*
 	gluNurbsSurface(theNurb, 
                    25, variableKnots, 25, variableKnots,
                    21 * 3, 3, variablePuntosControl, 
                    4, 4, GL_MAP2_VERTEX_3); 
-	*/
+
 	/*
-
 		No cambien los numeros de la funcion, solo deben de poner los nombres de las variables correspondiente.
-		
 	*/
 
-
-	gluEndSurface(theNurb);
-	
+	gluEndSurface(theNurb);	
 	glPopMatrix();
 	
 	
@@ -252,13 +256,12 @@ void render(){
 	glDisable(GL_LIGHTING);
 	glColor3f(1.0, 1.0, 0.0);
 	glBegin(GL_POINTS);
+
 	for (i = 0; i <21; i++) {
 		for (j = 0; j < 21; j++) {
-			function_waves(i,j,t);
 	        glVertex3f(ctlpoints[i][j][0], 	ctlpoints[i][j][1], ctlpoints[i][j][2]);
 		}
 	}
-	t += 0.1;
 	glEnd();
 	glEnable(GL_LIGHTING);
 		
@@ -266,15 +269,12 @@ void render(){
 	glDisable(GL_BLEND);
 	glDisable(GL_LINE_SMOOTH);
 
+	glutTimerFunc(10,function_waves,1);
+    glutPostRedisplay();
+
 	glutSwapBuffers();
 }
 
-void animacion(int value) {
-	
-	glutTimerFunc(10,animacion,1);
-    glutPostRedisplay();
-	
-}
 
 int main (int argc, char** argv) {
 
@@ -291,7 +291,7 @@ int main (int argc, char** argv) {
 	glutReshapeFunc(changeViewport);
 	glutDisplayFunc(render);
 	glutIdleFunc(render);
-	glutKeyboardFunc (Keyboard);
+	glutKeyboardFunc(Keyboard);
 		
 	GLenum err = glewInit();
 	if (GLEW_OK != err) {
@@ -301,6 +301,6 @@ int main (int argc, char** argv) {
 	
 
 	glutMainLoop();
-	return 0;
+	return 1;
 
 }
