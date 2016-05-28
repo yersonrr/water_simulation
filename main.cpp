@@ -15,9 +15,9 @@ using namespace std;
 float ctlpoints[21][21][3]; 
 GLfloat t=0, L1=1, L2=1, A1=0, A2=0, S1=0, S2=0, D1X=1, D1Y=1, D2X=0, D2Y=0;
 int wave = 1;
-GLfloat variableKnots[25] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-							 1.0, 2.0, 1.0, 2.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-							 0.0, 0.0, 0.0, 0.0, 0.0};
+GLfloat variableKnots[25] = {0,1,1,1,5,5,9,9,13,13,
+                             17,17,21,25,27,29,29,33,33,35,
+							 35,37,37,37,40};
 GLUnurbsObj *theNurb;
 
 void ejesCoordenada() {
@@ -78,15 +78,19 @@ void changeViewport(int w, int h) {
 
 void init_surface() {
 	// Create matrix
-	for (int i = 0; i <21; i++) {
+	int k = 10, l=10;
+	for (int i = 0; i < 21; i++) {
 		for (int j = 0; j < 21; j++) {
 			// Position in X
-			ctlpoints[i][j][0] = i - 10;
+			ctlpoints[i][j][0] = l;
 			// Position in Y
 			ctlpoints[i][j][1] = 0;
 			// Position in Z
-			ctlpoints[i][j][2] = j - 10;
+			ctlpoints[i][j][2] = k;
+			l--;
 		}
+		l = 10;
+		k--;
 	}
 }
 
@@ -197,7 +201,6 @@ void render(){
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);   
 
-
 	
 	// Render Grid 
 	glDisable(GL_LIGHTING);
@@ -225,18 +228,13 @@ void render(){
     glPopMatrix();
 	glEnable(GL_LIGHTING);
 	// Fin Grid
-	
-
 
 	//Suaviza las lineas
 	glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable( GL_LINE_SMOOTH );	
 
-	
 	GLfloat* variablePuntosControl = &ctlpoints[0][0][0]; 
-
 	glPushMatrix();
-
 	gluBeginSurface(theNurb);
 	gluNurbsSurface(theNurb, 
                    25, variableKnots, 25, variableKnots,
