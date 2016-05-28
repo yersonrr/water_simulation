@@ -13,8 +13,10 @@ using namespace std;
 #define pi 3.1415
 
 float ctlpoints[21][21][3]; 
-GLfloat t=0, L1=1, L2=1, A1=0, A2=0, S1=0, S2=0, D1X=1, D1Y=1, D2X=0, D2Y=0;
+GLfloat t=0, L1=1, L2=1, A1=0, A2=0, S1=0, S2=0, D1X=1, D1Y=1, D2X=0, D2Y=0,
+		L1a=8.0, L2a=3.0, A1a=0.3, A2a=0.2, S1a=0.5, S2a=1.0, D1Xa=0.0, D1Ya=-1.0, D2Xa=1.0, D2Ya=1.0;
 int wave = 1;
+int reproduce = 0;
 GLfloat variableKnots[25] = {0,1,1,1,5,5,9,9,13,13,
                              17,17,21,25,27,29,29,33,33,35,
 							 35,37,37,37,40};
@@ -100,7 +102,7 @@ void function_waves(int value){
 	float O1 = S1 * W1;
 	float O2 = S2 * W2;
 	
-	t += 0.1;
+	if (reproduce == 1) t += 0.1;
 	for (int i = 0; i <21; i++) {
 		for (int j = 0; j < 21; j++) {
 			ctlpoints[i][j][1] = A1 * sin((D1X*ctlpoints[i][j][0] +  D1Y*ctlpoints[i][j][2])*W1 + t * O1)
@@ -141,30 +143,62 @@ void Keyboard(unsigned char key, int x, int y)
 		break;
   };
 
-  if(wave == 1){
-	if (key == 'a') L1 -= 0.1;
-    else if (key == 'z') L1 += 0.1;
-    else if (key == 's') A1 -= 0.1;
-    else if (key == 'x') A1 += 0.1;
-    else if (key == 'd') S1 -= 0.1;
-    else if (key == 'c') S1 += 0.1;
-    else if (key == 'f') D1X -= 0.1;
-    else if (key == 'v') D1X += 0.1;
-	else if (key == 'g') D1Y -= 0.1;
-	else if (key == 'b') D1Y += 0.1;
-  } else {
-	if (key == '1') wave = 1;
-	else if (key == '2') wave = 2;
-	else if (key == 'a') L2 -= 0.1;
-    else if (key == 'z') L2 += 0.1;
-    else if (key == 's') A2 -= 0.1;
-    else if (key == 'x') A2 += 0.1;
-    else if (key == 'd') S2 -= 0.1;
-    else if (key == 'c') S2 += 0.1;
-    else if (key == 'f') D2X -= 0.1;
-	else if (key == 'v') D2X += 0.1;
-	else if (key == 'g') D2Y -= 0.1;
-	else if (key == 'b') D2Y += 0.1;
+  if(key == 'p' || key == 'P'){
+	  reproduce = 0;
+  }
+
+  if(key == 'r' || key == 'R'){
+	  reproduce = 1;
+	  L1 = L1a;
+	  A1 = A1a;
+	  S1 = S1a;
+	  D1X = D1Xa;
+	  D1Y = D1Xa;
+
+	  L2 = L2a;
+	  A2 = A2a;
+	  S2 = S2a;
+	  D2X = D2Xa;
+	  D2Y = D2Ya;
+  }
+
+  if (key == '2') wave = 2;
+
+  if(reproduce == 1){
+	  if(wave == 1){
+		  if (key == 'a') {L1 -= 0.1; L1a = L1;}
+		  else if (key == 'z') {L1 += 0.1; L1a = L1;}
+		  else if (key == 's') {A1 -= 0.1; A1a = A1;}
+		  else if (key == 'x') {A1 += 0.1; A1a = A1;}
+		  else if (key == 'd') {S1 -= 0.1; S1a = S1;}
+		  else if (key == 'c') {S1 += 0.1; S1a = S1;}
+		  else if (key == 'f') {D1X -= 0.1; D1Xa = D1X;}
+		  else if (key == 'v') {D1X += 0.1; D1Xa = D1X;}
+		  else if (key == 'g') {D1Y -= 0.1; D1Ya = D1Y;}
+		  else if (key == 'b') {D1Y += 0.1; D1Ya = D1Y;}
+	  } else {
+		if (key == '1') wave = 1;
+		else if (key == 'a') {L2 -= 0.1; L2a = L2;}
+		else if (key == 'z') {L2 += 0.1; L2a = L2;}
+		else if (key == 's') {A2 -= 0.1; A2a = A2;}
+		else if (key == 'x') {A2 += 0.1; A2a = A2;}
+		else if (key == 'd') {S2 -= 0.1; S2a = S2;}
+		else if (key == 'c') {S2 += 0.1; S2a = S2;}
+		else if (key == 'f') {D2X -= 0.1; D2Xa = D2X;}
+		else if (key == 'v') {D2X += 0.1; D2Xa = D2X;}
+		else if (key == 'g') {D2Y -= 0.1; D2Ya = D2Y;}
+		else if (key == 'b') {D2Y += 0.1; D2Ya = D2Y;}
+	  }
+	 system("CLS");
+	 printf("Variable Longitud primera ola: %f\n", L1);
+	 printf("Variable Altura primera ola: %f\n", A1);
+	 printf("Variable Velocidad primera ola: %f\n", S1);
+	 printf("Vector direccion de la Primera Ola: (%f , %f)\n\n", D1X, D1Y);
+
+	 printf("Variable Longitud Segunda ola: %f\n", L2);
+	 printf("Variable Altura Segunda ola: %f\n", A2);
+	 printf("Variable Velocidad Segunda ola: %f\n", S2);
+	 printf("Vector direccion de la Segunda Ola: (%f , %f)\n", D2X, D2Y);
   }
 }
 
@@ -203,6 +237,7 @@ void render(){
 
 	
 	// Render Grid 
+	/*
 	glDisable(GL_LIGHTING);
 	glLineWidth(1.0);
 	glPushMatrix();
@@ -228,7 +263,7 @@ void render(){
     glPopMatrix();
 	glEnable(GL_LIGHTING);
 	// Fin Grid
-
+	*/
 	//Suaviza las lineas
 	glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable( GL_LINE_SMOOTH );	
@@ -248,7 +283,7 @@ void render(){
 	
 	
 	/* Muestra los puntos de control */
-	
+	/*
 	int i,j;
 	glPointSize(5.0);
 	glDisable(GL_LIGHTING);
@@ -261,6 +296,8 @@ void render(){
 		}
 	}
 	glEnd();
+
+	*/
 	glEnable(GL_LIGHTING);
 		
 
