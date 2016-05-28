@@ -77,9 +77,17 @@ void changeViewport(int w, int h) {
 }
 
 void init_surface() {
-		
-	
-	
+	// Create matrix
+	for (int i = 0; i <21; i++) {
+		for (int j = 0; j < 21; j++) {
+			// Position in X
+			ctlpoints[i][j][0] = i - 10;
+			// Position in Y
+			ctlpoints[i][j][1] = 0;
+			// Position in Z
+			ctlpoints[i][j][2] = j - 10;
+		}
+	}
 }
 
 void function_waves(int value){
@@ -88,13 +96,16 @@ void function_waves(int value){
 	float O1 = S1 * W1;
 	float O2 = S2 * W2;
 	
+	t += 0.1;
 	for (int i = 0; i <21; i++) {
 		for (int j = 0; j < 21; j++) {
-			ctlpoints[i][j][1] = A1 * sin((D1X*ctlpoints[i][j][0] +  D1Y*ctlpoints[i][j][2])*W1 + 100 * O1)
-					   + A2 * sin((D2X*ctlpoints[i][j][0] +  D2Y*ctlpoints[i][j][2])*W2 + 100 * O2);
+			ctlpoints[i][j][1] = A1 * sin((D1X*ctlpoints[i][j][0] +  D1Y*ctlpoints[i][j][2])*W1 + t * O1)
+					   + A2 * sin((D2X*ctlpoints[i][j][0] +  D2Y*ctlpoints[i][j][2])*W2 + t * O2);
 		}
 	}
-	
+
+	glutTimerFunc(10,function_waves,1);
+    glutPostRedisplay();
 }
 
 void init(){
@@ -111,18 +122,8 @@ void init(){
    gluNurbsProperty(theNurb, GLU_SAMPLING_TOLERANCE, 15.0);
    gluNurbsProperty(theNurb, GLU_DISPLAY_MODE, GLU_FILL);
 
-   // Create matrix
-	for (int i = 0; i <21; i++) {
-		for (int j = 0; j < 21; j++) {
-			// Position in X
-			ctlpoints[i][j][0] = i - 10;
-			// Position in Y
-			ctlpoints[i][j][1] = 0;
-			// Position in Z
-			ctlpoints[i][j][2] = j - 10;
-		}
-	}
-
+   glutTimerFunc(10,function_waves,1);
+   t = 0.0;
 }
 
 
@@ -235,16 +236,15 @@ void render(){
 	GLfloat* variablePuntosControl = &ctlpoints[0][0][0]; 
 
 	glPushMatrix();
+
 	gluBeginSurface(theNurb);
 	gluNurbsSurface(theNurb, 
                    25, variableKnots, 25, variableKnots,
                    21 * 3, 3, variablePuntosControl, 
                    4, 4, GL_MAP2_VERTEX_3); 
-
 	/*
 		No cambien los numeros de la funcion, solo deben de poner los nombres de las variables correspondiente.
 	*/
-
 	gluEndSurface(theNurb);	
 	glPopMatrix();
 	
@@ -268,10 +268,6 @@ void render(){
 
 	glDisable(GL_BLEND);
 	glDisable(GL_LINE_SMOOTH);
-
-	glutTimerFunc(10,function_waves,1);
-    glutPostRedisplay();
-
 	glutSwapBuffers();
 }
 
@@ -287,10 +283,8 @@ int main (int argc, char** argv) {
 	glutCreateWindow("Nurbs Proyecto - Ola");
 
 	init ();
-
 	glutReshapeFunc(changeViewport);
 	glutDisplayFunc(render);
-	glutIdleFunc(render);
 	glutKeyboardFunc(Keyboard);
 		
 	GLenum err = glewInit();
