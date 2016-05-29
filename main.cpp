@@ -14,7 +14,7 @@ using namespace std;
 
 float ctlpoints[21][21][3]; 
 GLfloat t=0, L1=1, L2=1, A1=0, A2=0, S1=0, S2=0, D1X=1, D1Y=1, D2X=0, D2Y=0,
-		L1a=8.0, L2a=3.0, A1a=0.3, A2a=0.2, S1a=0.5, S2a=1.0, D1Xa=0.0, D1Ya=-1.0, D2Xa=1.0, D2Ya=1.0;
+		L1a=8.0, L2a=4.0, A1a=0.4, A2a=0.0, S1a=2.0, S2a=0.0, D1Xa=0.0, D1Ya=-1.0, D2Xa=1.0, D2Ya=1.0;
 int wave = 1;
 int reproduce = 0;
 GLfloat variableKnots[25] = {0,1,1,1,5,5,9,9,13,13,
@@ -153,7 +153,7 @@ void Keyboard(unsigned char key, int x, int y)
 	  A1 = A1a;
 	  S1 = S1a;
 	  D1X = D1Xa;
-	  D1Y = D1Xa;
+	  D1Y = D1Ya;
 
 	  L2 = L2a;
 	  A2 = A2a;
@@ -190,15 +190,21 @@ void Keyboard(unsigned char key, int x, int y)
 		else if (key == 'b') {D2Y += 0.1; D2Ya = D2Y;}
 	  }
 	 system("CLS");
-	 printf("Variable Longitud primera ola: %f\n", L1);
-	 printf("Variable Altura primera ola: %f\n", A1);
-	 printf("Variable Velocidad primera ola: %f\n", S1);
-	 printf("Vector direccion de la Primera Ola: (%f , %f)\n\n", D1X, D1Y);
+	 printf("Ola 1 \n\n");
+	 printf("wL = %f\n\n", L1);
+	 printf("aP = %f\n\n", A1);
+	 printf("sP = %f\n\n", S1);
+	 printf("dirX = %f\n\n", D1X);
+	 printf("dirY = %f\n\n", D1Y);
 
-	 printf("Variable Longitud Segunda ola: %f\n", L2);
-	 printf("Variable Altura Segunda ola: %f\n", A2);
-	 printf("Variable Velocidad Segunda ola: %f\n", S2);
-	 printf("Vector direccion de la Segunda Ola: (%f , %f)\n", D2X, D2Y);
+	 printf("=================== \n");
+
+	 printf("Ola 2 \n\n");
+	 printf("wL = %f\n\n", L2);
+	 printf("aP = %f\n\n", A2);
+	 printf("sP = %f\n\n", S2);
+	 printf("dirX = %f\n\n", D2X);
+	 printf("dirY = %f", D2Y);
   }
 }
 
