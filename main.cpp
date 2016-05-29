@@ -17,9 +17,10 @@ GLfloat t=0, L1=1, L2=1, A1=0, A2=0, S1=0, S2=0, D1X=1, D1Y=1, D2X=0, D2Y=0,
 		L1a=8.0, L2a=4.0, A1a=0.4, A2a=0.0, S1a=2.0, S2a=0.0, D1Xa=0.0, D1Ya=-1.0, D2Xa=1.0, D2Ya=1.0;
 int wave = 1;
 int reproduce = 0;
-GLfloat variableKnots[25] = {0,1,1,1,5,5,9,9,13,13,
-                             17,17,21,25,27,29,29,33,33,35,
-							 35,37,37,37,40};
+GLfloat variableKnots[25] = {0.0, 0.0, 0.0, 0.0, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35,
+                             0.4, 0.45, 0.47, 0.5, 0.55, 0.6, 0.75, 0.85, 0.89, 0.92,
+							 0.97, 1, 1, 1, 1};
+
 GLUnurbsObj *theNurb;
 
 void ejesCoordenada() {
